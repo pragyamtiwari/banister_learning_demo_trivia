@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Python Basics Trivia</title>
+  <style>
+    /* Styles (same as original, already provided) */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background-color: #f3f4f6;
+      color: #1f2937;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #143b63;
+      color: white;
+      padding: 1rem 2rem;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    nav a {
+      margin-left: 1rem;
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    main {
+      flex: 1;
+      max-width: 720px;
+      margin: 3rem auto;
+      padding: 3rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+
+    .filler-text {
+      margin-top: 2rem;
+      color: #4b5563;
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    h1, .subtitle {
+      text-align: left;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #6b7280;
+      margin-bottom: 2rem;
+    }
+
+    .timer {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+      color: #143b63;
+    }
+
+    #question {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin: 2rem 0 1.5rem;
+      text-align: left;
+    }
+
+    #choices button {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      margin: 0.75rem 0;
+      font-size: 1.05rem;
+      background-color: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+      text-align: left;
+      color: #1f2937;
+    }
+
+    #choices button:hover {
+      background-color: #e0f2fe;
+      border-color: #3b82f6;
+      transform: scale(1.01);
+    }
+
+    #start-container {
+      display: flex;
+      justify-content: center;
+      margin: 2.5rem 0 2rem;
+    }
+
+    #start {
+      padding: 1rem 2.5rem;
+      font-size: 1.2rem;
+      background-color: #143b63;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    #start:hover {
+      background-color: #0f2f4f;
+      transform: scale(1.02);
+    }
+
+    #start:disabled {
+      background-color: #a0aec0;
+      cursor: not-allowed;
+    }
+
+    #score {
+      font-size: 1.3rem;
+      margin-top: 2rem;
+      text-align: left;
+      color: #111827;
+    }
+
+    #result-screen {
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    #progress-title {
+      font-size: 1.4rem;
+      color: #222;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-container {
+      margin-top: 1rem;
+    }
+
+    .bar {
+      margin: 1.5rem 0;
+      display: none;
+    }
+
+    .bar span {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: #374151;
+    }
+
+    .bar-bg {
+      width: 100%;
+      background: #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 28px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      font-size: 0.95rem;
+      line-height: 28px;
+      text-align: right;
+      padding-right: 10px;
+      border-radius: 10px;
+      transition: width 0.4s ease-in-out;
+    }
+
+    .bar-fill.red {
+      background-color: #ef4444;
+      color: white;
+    }
+
+    .bar-fill.yellow {
+      background-color: #fbbf24;
+      color: #111827;
+    }
+
+    .bar-fill.green {
+      background-color: #10b981;
+      color: white;
+    }
+
+    footer {
+      background-color: #143b63;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 1rem;
+      }
+
+      .nav-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .logo {
+        font-size: 1.6rem;
+        text-align: center;
+      }
+
+      main {
+        margin: 1rem;
+        padding: 2rem 1.5rem;
+        box-shadow: none;
+        border-radius: 12px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .bar-fill {
+        font-size: 0.85rem;
+      }
+
+      #start {
+        width: 100%;
+      }
+
+      #question {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="logo">Banister Learning</div>
+      <nav>
+        <a href="#">Course</a>
+        <a href="#">Support</a>
+        <a href="#">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <h1 id="title">1.3 - Python Basics Trivia</h1>
+    <p class="subtitle" id="subtitle">How well do you know Python fundamentals?</p>
+
+    <p id="timer" class="timer">Time: 30</p>
+    <p id="question">Click Start to begin!</p>
+    <div id="choices" class="choices"></div>
+
+    <div id="start-container">
+      <button id="start">Start Game</button>
+    </div>
+
+    <div class="filler-text" id="filler-text">
+      <p>Test your foundational Python knowledge! From variables and functions to loops and data types, this trivia game challenges your understanding of essential programming concepts.</p>
+      <p>Perfect for beginners, students, or anyone brushing up on their Python skills.</p>
+    </div>
+
+    <p id="score"></p>
+
+    <section id="result-screen">
+      <h2 id="progress-title" style="display:none;">Your Performance by Topic</h2>
+      <div id="progress" class="progress-container" style="display:none;"></div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Banister Learning. All rights reserved.
+  </footer>
+
+  <script>
+    const questions = [
+  // Functions
+  { q: "What keyword is used to define a function in Python?", options: ["func", "define", "def", "function"], a: "def", difficulty: "easy", subsection: "Functions" },
+  { q: "What keyword is used to return a value from a function?", options: ["send", "yield", "return", "export"], a: "return", difficulty: "easy", subsection: "Functions" },
+
+  // Variables
+  { q: "Which of the following is a valid variable name?", options: ["2var", "_var", "var-name", "class"], a: "_var", difficulty: "easy", subsection: "Variables" },
+  { q: "Which keyword declares a global variable?", options: ["global", "var", "let", "const"], a: "global", difficulty: "medium", subsection: "Variables" },
+
+  // Operators
+  { q: "What is the output of 10 // 3?", options: ["3.33", "3", "3.0", "Error"], a: "3", difficulty: "medium", subsection: "Operators" },
+  { q: "Which operator is used for exponentiation?", options: ["^", "**", "//", "%"], a: "**", difficulty: "medium", subsection: "Operators" },
+
+  // Lists
+  { q: "Which of the following is a list?", options: ['{"a":1}', '(1,2)', '[1,2,3]', '"1,2,3"'], a: "[1,2,3]", difficulty: "easy", subsection: "Lists" },
+  { q: "What method adds an item to a list?", options: ["push()", "insert()", "add()", "append()"], a: "append()", difficulty: "easy", subsection: "Lists" },
+
+  // Data Types
+  { q: "What type is the value 'True'?", options: ["int", "str", "bool", "None"], a: "bool", difficulty: "easy", subsection: "Data Types" },
+  { q: "Which of these is an immutable type?", options: ["list", "dict", "tuple", "set"], a: "tuple", difficulty: "medium", subsection: "Data Types" },
+
+  // Tuples
+  { q: "Which is a valid tuple?", options: ["[1, 2]", "(1, 2)", "{1, 2}", '"1, 2"'], a: "(1, 2)", difficulty: "easy", subsection: "Tuples" },
+  { q: "Can a tuple be changed after creation?", options: ["Yes", "Only length", "Only values", "No"], a: "No", difficulty: "easy", subsection: "Tuples" },
+
+  // Strings
+  { q: "Which method would you use to make a string all uppercase?", options: [".capitalize()", ".title()", ".upper()", ".lower()"], a: ".upper()", difficulty: "easy", subsection: "Strings" },
+  { q: "What does 'hello'.find('e') return?", options: ["0", "1", "2", "-1"], a: "1", difficulty: "medium", subsection: "Strings" },
+
+  // Importing
+  { q: "Which syntax correctly imports a module?", options: ["import-module math", "include math", "import math", "load math"], a: "import math", difficulty: "easy", subsection: "Importing" },
+  { q: "What does 'from math import sqrt' do?", options: ["Imports whole math", "Defines sqrt", "Imports only sqrt", "Throws error"], a: "Imports only sqrt", difficulty: "medium", subsection: "Importing" },
+
+  // Comprehensions
+  { q: "What does list comprehension allow you to do?", options: ["Sort a list", "Loop and build lists in one line", "Convert a list to string", "Filter None values"], a: "Loop and build lists in one line", difficulty: "medium", subsection: "Comprehensions" },
+  { q: "Which creates a list of squares 0 to 4?", options: ["[x^2 for x in range(5)]", "[x*x for x in range(5)]", "[x**2 for x in 5]", "[x*2 for x in 5]"], a: "[x*x for x in range(5)]", difficulty: "medium", subsection: "Comprehensions" },
+
+  // Errors
+  { q: "Which keyword is used to handle exceptions?", options: ["throw", "except", "error", "fail"], a: "except", difficulty: "medium", subsection: "Errors" },
+  { q: "Which block must follow a 'try' block?", options: ["if", "for", "except", "catch"], a: "except", difficulty: "easy", subsection: "Errors" },
+
+  // Built-ins
+  { q: "Which function gets the number of items in a list?", options: ["count()", "length()", "size()", "len()"], a: "len()", difficulty: "easy", subsection: "Built-ins" },
+  { q: "What does type(3.14) return?", options: ["int", "float", "double", "decimal"], a: "float", difficulty: "easy", subsection: "Built-ins" },
+
+  // Loops
+  { q: "What keyword exits a loop early?", options: ["exit", "stop", "break", "return"], a: "break", difficulty: "easy", subsection: "Loops" },
+  { q: "What type of loop uses 'while'?", options: ["for", "conditional", "indefinite", "iterator"], a: "indefinite", difficulty: "medium", subsection: "Loops" },
+
+  // Scope
+  { q: "In Python, what is the global scope?", options: ["The outermost function", "Only inside modules", "Available everywhere", "A type of error"], a: "Available everywhere", difficulty: "medium", subsection: "Scope" },
+  { q: "What keyword declares a variable as global inside a function?", options: ["global", "var", "let", "access"], a: "global", difficulty: "medium", subsection: "Scope" },
+
+  // OOP
+  { q: "What is `self` used for in a class?", options: ["Refers to a module", "Refers to itself", "Refers to the current instance", "Nothing special"], a: "Refers to the current instance", difficulty: "medium", subsection: "OOP" },
+  { q: "Which keyword is used to define a class?", options: ["def", "object", "type", "class"], a: "class", difficulty: "easy", subsection: "OOP" },
+
+  // Recursion
+  { q: "What is recursion?", options: ["A loop inside a loop", "A function that calls itself", "A Python library", "A syntax error"], a: "A function that calls itself", difficulty: "medium", subsection: "Recursion" },
+  { q: "What must be true to prevent infinite recursion?", options: ["Global variable", "Base case", "While loop", "None"], a: "Base case", difficulty: "medium", subsection: "Recursion" },
+
+  // Modules
+  { q: "Which file type is typically used for Python modules?", options: [".exe", ".py", ".js", ".mod"], a: ".py", difficulty: "easy", subsection: "Modules" },
+  { q: "What is __name__ set to in a module that is run directly?", options: ["__main__", "main", "module", "start"], a: "__main__", difficulty: "medium", subsection: "Modules" }
+];
+
+
+    let availableQuestions = [];
+    let score = 0;
+    let timeLeft = 30;
+    let timer;
+
+    const correctCounts = {};
+    const attemptCounts = {};
+
+    const timerEl = document.getElementById('timer');
+    const questionEl = document.getElementById('question');
+    const choicesEl = document.getElementById('choices');
+    const startBtn = document.getElementById('start');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const progressTitle = document.getElementById('progress-title');
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function emojiForSub(sub) {
+  return {
+    "Functions": "🔧",
+    "Variables": "📦",
+    "Operators": "➗",
+    "Lists": "📝",
+    "Data Types": "🔤",
+    "Tuples": "🔗",
+    "Strings": "🔡",
+    "Importing": "📥",
+    "Comprehensions": "🧠",
+    "Errors": "🚨",
+    "Built-ins": "🧰",
+    "Loops": "🔁",
+    "Scope": "📍",
+    "OOP": "🏗️",
+    "Recursion": "♻️",
+    "Modules": "📦"
+  }[sub] || "📘";
+}
+
+
+    function startGame() {
+      score = 0;
+      timeLeft = 30;
+      availableQuestions = shuffle([...questions]);
+      startBtn.disabled = true;
+      startBtn.style.display = 'none';
+      document.getElementById('start-container').style.display = 'none';
+      scoreEl.textContent = '';
+      choicesEl.innerHTML = '';
+      questionEl.textContent = '';
+      progressEl.innerHTML = '';
+      progressEl.style.display = 'none';
+      progressTitle.style.display = 'none';
+
+      const subsections = [...new Set(questions.map(q => q.subsection))];
+      subsections.forEach(sub => {
+        correctCounts[sub] = 0;
+        attemptCounts[sub] = 0;
+
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.id = `bar-${sub}`;
+        bar.innerHTML = `
+          <span>${emojiForSub(sub)} ${sub}</span>
+          <div class="bar-bg">
+            <div class="bar-fill" id="fill-${sub}" style="width: 0%"></div>
+          </div>`;
+        progressEl.appendChild(bar);
+      });
+
+      nextQuestion();
+
+      timer = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = `Time: ${timeLeft}`;
+        if (timeLeft <= 0) endGame("⏰ Time's up!");
+      }, 1000);
+    }
+
+    function updateProgressBars() {
+      let visibleBars = 0;
+      for (const sub in correctCounts) {
+        const attempts = attemptCounts[sub];
+        const correct = correctCounts[sub];
+        const percent = attempts === 0 ? 0 : Math.round((correct / attempts) * 100);
+        const bar = document.getElementById(`bar-${sub}`);
+        const fill = document.getElementById(`fill-${sub}`);
+
+        if (attempts < 2) {
+          bar.style.display = 'none';
+          continue;
+        }
+
+        bar.style.display = 'block';
+        visibleBars++;
+        fill.style.width = `${percent}%`;
+        fill.textContent = `${percent}%`;
+
+        if (percent >= 80) fill.className = 'bar-fill green';
+        else if (percent >= 50) fill.className = 'bar-fill yellow';
+        else fill.className = 'bar-fill red';
+      }
+      progressTitle.style.display = visibleBars > 0 ? 'block' : 'none';
+    }
+
+    function hasAchievedMastery() {
+      return Object.keys(correctCounts).every(sub => {
+        const attempts = attemptCounts[sub];
+        const correct = correctCounts[sub];
+        const percent = attempts === 0 ? 0 : Math.round((correct / attempts) * 100);
+        return attempts >= 2 && percent >= 80;
+      });
+    }
+
+    function endGame(message) {
+      clearInterval(timer);
+      questionEl.textContent = message;
+      choicesEl.innerHTML = '';
+      startBtn.disabled = false;
+      document.getElementById('start-container').style.display = 'flex';
+      scoreEl.innerHTML = `🎯 <strong>Your Score:</strong> <span style="font-size: 1.5rem;">${score}</span>`;
+      progressEl.style.display = 'block';
+      updateProgressBars();
+    }
+
+    function nextQuestion() {
+      const remaining = availableQuestions.filter(q => {
+        const sub = q.subsection;
+        const attempts = attemptCounts[sub];
+        const correct = correctCounts[sub];
+        const percent = attempts === 0 ? 0 : Math.round((correct / attempts) * 100);
+        return attempts < 2 || percent < 80;
+      });
+
+      if (remaining.length === 0) {
+        if (hasAchievedMastery()) endGame('🎉 Mastery achieved in all topics!');
+        else endGame('📘 You’ve answered all questions but did not achieve mastery in all sections.');
+        return;
+      }
+
+      const index = Math.floor(Math.random() * remaining.length);
+      const question = remaining.splice(index, 1)[0];
+      availableQuestions = availableQuestions.filter(q => q !== question);
+
+      questionEl.textContent = question.q;
+      choicesEl.innerHTML = '';
+
+      question.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.textContent = option;
+        btn.addEventListener('click', () => {
+          const sub = question.subsection;
+          attemptCounts[sub]++;
+          if (option === question.a) {
+            correctCounts[sub]++;
+            score++;
+          }
+          nextQuestion();
+        });
+        choicesEl.appendChild(btn);
+      });
+    }
+
+    startBtn.addEventListener('click', startGame);
+  </script>
+</body>
+</html>
